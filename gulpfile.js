@@ -21,7 +21,7 @@ var config = {
 };
 
 gulp.task('html', ['clean'], function () {
-  return gulp.src('./index.html')
+  return gulp.src('./app/index.html')
     .pipe(gif(config.dist, minifyhtml()))
     .pipe(gulp.dest('./target'));
 });
@@ -31,7 +31,7 @@ gulp.task('javascript', ['clean'], function () {
   return bundle();
 
   function bundler() {
-    var b = browserify('./index.js')
+    var b = browserify('./app/index.js')
       .transform(reactify);
     if (config.watch) {
       var w = watchify(b, watchify.args);
@@ -59,4 +59,4 @@ gulp.task('clean', function () {
 })
 
 gulp.task('build', ['html', 'javascript'])
-gulp.task('default', ['build', 'serve']);
+gulp.task('default', ['build']);
