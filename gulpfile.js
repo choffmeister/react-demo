@@ -2,6 +2,7 @@ var argv = require('yargs').argv,
     browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
     connect = require('gulp-connect'),
+    del = require('del'),
     gif = require('gulp-if'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
@@ -9,7 +10,6 @@ var argv = require('yargs').argv,
     minifyhtml = require('gulp-minify-html'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
-    rimraf = require('gulp-rimraf'),
     source = require('vinyl-source-stream'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
@@ -70,9 +70,8 @@ gulp.task('connect', function () {
   });
 });
 
-gulp.task('clean', function () {
-  return gulp.src('./target', { read: false })
-    .pipe(rimraf());
+gulp.task('clean', function (cb) {
+  del(['./target/**'], cb);
 })
 
 gulp.task('build', ['html', 'css', 'javascript'])
