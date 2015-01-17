@@ -4,9 +4,9 @@
 # initialize
 $ npm install
 
-# run in development mode
-$ gulp --watch
+# run in development mode (with optional watching for changes)
+$ gulp server --watch
 
-# build distributable package
+# build distributable package (with optional minification)
 $ gulp build --dist
 ~~~

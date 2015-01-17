@@ -1,9 +1,11 @@
 var argv = require('yargs').argv,
     browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
+    connect = require('gulp-connect'),
     gif = require('gulp-if'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
+    less = require('gulp-less'),
     minifyhtml = require('gulp-minify-html'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
@@ -21,9 +23,15 @@ var config = {
 };
 
 gulp.task('html', ['clean'], function () {
-  return gulp.src('./app/index.html')
+  return gulp.src('./index.html')
     .pipe(gif(config.dist, minifyhtml()))
     .pipe(gulp.dest('./target'));
+});
+
+gulp.task('css', ['clean'], function () {
+  return gulp.src('./app/style.less')
+    .pipe(less({ compress: config.dist }))
+    .pipe(gulp.dest('./target/app'))
 });
 
 gulp.task('javascript', ['clean'], function () {
@@ -31,7 +39,7 @@ gulp.task('javascript', ['clean'], function () {
   return bundle();
 
   function bundler() {
-    var b = browserify('./app/index.js')
+    var b = browserify('./app/app.js')
       .transform(reactify);
     if (config.watch) {
       var w = watchify(b, watchify.args);
@@ -49,8 +57,17 @@ gulp.task('javascript', ['clean'], function () {
       .pipe(gif(config.debug, sourcemaps.init({ localMaps: true })))
       .pipe(gif(config.dist, uglify({ preserveComments: 'some' })))
       .pipe(sourcemaps.write('.'))
+      .pipe(connect.reload())
       .pipe(gulp.dest('./target/app'));
   };
+});
+
+gulp.task('connect', function () {
+  connect.server({
+    port: config.port,
+    root: './target',
+    livereload: config.watch
+  });
 });
 
 gulp.task('clean', function () {
@@ -58,5 +75,5 @@ gulp.task('clean', function () {
     .pipe(rimraf());
 })
 
-gulp.task('build', ['html', 'javascript'])
-gulp.task('default', ['build']);
+gulp.task('build', ['html', 'css', 'javascript'])
+gulp.task('server', ['build', 'connect']);
