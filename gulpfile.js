@@ -10,6 +10,7 @@ var argv = require('yargs').argv,
     reactify = require('reactify'),
     rename = require('gulp-rename'),
     rimraf = require('gulp-rimraf'),
+    size = require('gulp-size'),
     source = require('vinyl-source-stream'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
@@ -25,12 +26,14 @@ var config = {
 gulp.task('html', ['clean'], function () {
   return gulp.src('./index.html')
     .pipe(gif(config.dist, minifyhtml()))
+    .pipe(size({ showFiles: true, gzip: config.dist }))
     .pipe(gulp.dest('./target'));
 });
 
 gulp.task('css', ['clean'], function () {
   return gulp.src('./app/style.less')
     .pipe(less({ compress: config.dist }))
+    .pipe(size({ showFiles: true, gzip: config.dist }))
     .pipe(gulp.dest('./target/app'))
 });
 
@@ -56,6 +59,7 @@ gulp.task('javascript', ['clean'], function () {
       .pipe(buffer())
       .pipe(gif(config.debug, sourcemaps.init({ localMaps: true })))
       .pipe(gif(config.dist, uglify({ preserveComments: 'some' })))
+      .pipe(size({ showFiles: true, gzip: config.dist }))
       .pipe(sourcemaps.write('.'))
       .pipe(connect.reload())
       .pipe(gulp.dest('./target/app'));
