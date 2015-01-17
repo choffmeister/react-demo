@@ -2,6 +2,7 @@ var argv = require('yargs').argv,
     browserify = require('browserify'),
     buffer = require('vinyl-buffer'),
     connect = require('gulp-connect'),
+    del = require('del'),
     gif = require('gulp-if'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
@@ -9,7 +10,6 @@ var argv = require('yargs').argv,
     minifyhtml = require('gulp-minify-html'),
     reactify = require('reactify'),
     rename = require('gulp-rename'),
-    rimraf = require('gulp-rimraf'),
     size = require('gulp-size'),
     source = require('vinyl-source-stream'),
     sourcemaps = require('gulp-sourcemaps'),
@@ -42,7 +42,7 @@ gulp.task('javascript', ['clean'], function () {
   return bundle();
 
   function bundler() {
-    var b = browserify('./app/app.js')
+    var b = browserify('./app/app.jsx')
       .transform(reactify);
     if (config.watch) {
       var w = watchify(b, watchify.args);
@@ -66,7 +66,7 @@ gulp.task('javascript', ['clean'], function () {
   };
 });
 
-gulp.task('connect', function () {
+gulp.task('connect', ['build'], function () {
   connect.server({
     port: config.port,
     root: './target',
@@ -74,10 +74,9 @@ gulp.task('connect', function () {
   });
 });
 
-gulp.task('clean', function () {
-  return gulp.src('./target', { read: false })
-    .pipe(rimraf());
+gulp.task('clean', function (cb) {
+  del(['./target/**'], cb);
 })
 
 gulp.task('build', ['html', 'css', 'javascript'])
-gulp.task('server', ['build', 'connect']);
+gulp.task('server', ['connect']);
