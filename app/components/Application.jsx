@@ -5,3 +5,5 @@ var Application = React.createClass({
     return <div>{this.props.title}</div>;
   }
 });
+
+module.exports = Application;
