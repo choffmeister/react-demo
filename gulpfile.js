@@ -5,6 +5,7 @@ var argv = require('yargs').argv,
     gulp = require('gulp'),
     gutil = require('gulp-util'),
     minifyhtml = require('gulp-minify-html'),
+    reactify = require('reactify'),
     rename = require('gulp-rename'),
     rimraf = require('gulp-rimraf'),
     source = require('vinyl-source-stream'),
@@ -15,7 +16,8 @@ var argv = require('yargs').argv,
 var config = {
   debug: !argv.dist,
   dist: argv.dist,
-  watch: argv.watch
+  watch: argv.watch,
+  port: argv.port || 9000
 };
 
 gulp.task('html', ['clean'], function () {
@@ -29,7 +31,8 @@ gulp.task('javascript', ['clean'], function () {
   return bundle();
 
   function bundler() {
-    var b = browserify('./index.js');
+    var b = browserify('./index.js')
+      .transform(reactify);
     if (config.watch) {
       var w = watchify(b, watchify.args);
       w.on('update', bundle);
@@ -56,4 +59,4 @@ gulp.task('clean', function () {
 })
 
 gulp.task('build', ['html', 'javascript'])
-gulp.task('default', ['build']);
+gulp.task('default', ['build', 'serve']);

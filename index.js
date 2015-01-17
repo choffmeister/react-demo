@@ -1,4 +1,4 @@
-var _ = require('lodash');
-//var React = require('react');
+var React = require('react'),
+    Application = require('./components/Application.jsx');
 
-console.log('Hello World!');
+React.render(<Application title="shop" />, document.body);
