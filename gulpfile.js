@@ -39,7 +39,7 @@ gulp.task('javascript', ['clean'], function () {
   return bundle();
 
   function bundler() {
-    var b = browserify('./app/app.js')
+    var b = browserify('./app/app.jsx')
       .transform(reactify);
     if (config.watch) {
       var w = watchify(b, watchify.args);
