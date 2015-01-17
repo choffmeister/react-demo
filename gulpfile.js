@@ -62,7 +62,7 @@ gulp.task('javascript', ['clean'], function () {
   };
 });
 
-gulp.task('connect', function () {
+gulp.task('connect', ['build'], function () {
   connect.server({
     port: config.port,
     root: './target',
@@ -75,4 +75,4 @@ gulp.task('clean', function (cb) {
 })
 
 gulp.task('build', ['html', 'css', 'javascript'])
-gulp.task('server', ['build', 'connect']);
+gulp.task('server', ['connect']);
