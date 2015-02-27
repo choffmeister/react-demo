@@ -7,14 +7,13 @@ var ReactRouter = require('react-router'),
 
 var App = require('./components/App.jsx'),
     Home = require('./components/Home.jsx'),
-    Content = require('./components/Content.jsx'),
     About = require('./components/About.jsx');
 
 var routes = (
   <Route name="app" handler={App} path="/">
+    <DefaultRoute handler={Home}/>
     <Route name="home" handler={Home} path="/"/>
     <Route name="about" handler={About}/>
-    <DefaultRoute handler={Home}/>
   </Route>
 );
 
