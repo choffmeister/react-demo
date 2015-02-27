@@ -31,7 +31,7 @@ var onerror = function (err) {
 };
 
 gulp.task('html', function () {
-  return gulp.src('./index.html')
+  return gulp.src('./app/index.html')
     .pipe(gif(config.dist, minifyhtml()))
     .pipe(size({ showFiles: true, gzip: config.dist }))
     .pipe(connect.reload())
@@ -48,7 +48,7 @@ gulp.task('css', function () {
 });
 
 gulp.task('javascript', function () {
-  var bundler = browserify('./app/app.jsx')
+  var bundler = browserify('./app/main.jsx')
     .transform(reactify);
   return bundle();
 
