@@ -1,4 +1,5 @@
 var React = require('react'),
+    RestClient = require('../services/RestClient'),
     Content = require('./Content.jsx');
 
 var data = [
@@ -13,6 +14,12 @@ var data = [
 ];
 
 var Home = React.createClass({
+  statics: {
+    fetchData: function () {
+      return RestClient.get('http://addressbook-api.herokuapp.com/contacts');
+    }
+  },
+
   render: function () {
     return (
       <div>

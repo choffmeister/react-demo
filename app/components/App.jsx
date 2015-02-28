@@ -10,6 +10,7 @@ var App = React.createClass({
         <div className="container">
           <ReactRouter.RouteHandler/>
         </div>
+        <pre>{this.props.data}</pre>
       </div>
     );
   }
